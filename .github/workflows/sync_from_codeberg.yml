@@ -1,0 +1,60 @@
+name: Sync docs from CodeBerg
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get GitHub repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Codeberg repo
+        run: |
+          git clone --depth=1 https://codeberg.org/emmabastas/html-lint.git codeberg-src
+
+      - name: Copy selected files
+        run: |
+          cp codeberg-src/README.md .
+          cp codeberg-src/LICENSE .
+
+      - name: Remove Codeberg repo
+        run: |
+          rm -rf codeberg-src/
+
+      - name: Add disclaimer to README.md
+        run: |
+          disclaimer=$(cat << EOF
+          > # ⚠️ This repository is a mirror of [a Codeberg repository](https://codeberg.org/emmabastas/html-lint)
+          >
+          > There are many reasons to prefer a community-run platform like Codeberg over something like GitHub which is a for-profit company part of a soft power apparatus. I think [this blogpost](https://seanfobbe.com/posts/2025-04-10_migrating-open-source-code-from-github-to-codeberg/) articulates some of those reasons well.
+          >
+          > Please feel free to open issues here! But if you want to have a look at the code then head on over to Codeberg :-)
+          > [codeberg.org/emmabastas/html-lint](https://codeberg.org/emmabastas/html-lint)
+
+          EOF
+          )
+
+          # Thank you https://stackoverflow.com/a/24892465
+          echo "$disclaimer" | cat - README.md > README-disclaimer.md
+          mv README-disclaimer.md README.md
+
+      - name: Commit & push if changed
+        env:
+          GITHUB_ACTOR: github-actions[bot]
+        run: |
+          if git status --porcelain | grep .; then
+            git config user.name "codeberg-sync-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add -A
+            git commit -m "chore: sync docs from CodeBerg"
+            git push
+          else
+            echo "No changes to commit."
+          fi
