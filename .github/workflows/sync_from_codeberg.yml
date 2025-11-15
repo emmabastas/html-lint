@@ -19,10 +19,11 @@ jobs:
         run: |
           git clone --depth=1 https://codeberg.org/emmabastas/html-lint.git codeberg-src
 
-      - name: Copy selected files
+      - name: Move selected files
         run: |
-          cp codeberg-src/README.md .
-          cp codeberg-src/LICENSE .
+          mv codeberg-src/README.md .
+          mv codeberg-src/LICENSE .
+          mv codeberg-src/resources .
 
       - name: Remove Codeberg repo
         run: |
