@@ -23,6 +23,8 @@ jobs:
         run: |
           mv codeberg-src/README.md .
           mv codeberg-src/LICENSE .
+
+          rm -rf resources
           mv codeberg-src/resources .
 
       - name: Remove Codeberg repo
