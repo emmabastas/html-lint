@@ -34,43 +34,60 @@ There are many nice HTML linters out there, however `html-lint` tries to be some
 
 ### Installing
 
-- **Prebuilt binaries** in the [dist/cli](TODO) folder.
-- **npm** `npm install --save-dev @emmabastas/html-lint-cli`
-- **pip** `pip install html-lint`
+- **Prebuilt binaries** See [releases](https://codeberg.org/emmabastas/html-lint/releases) for prebuilt binaries
+- **npm** `npm install @emmabastas/html-lint`
+- **pip** **TODO**
+- **cargo** `cargo install html-lint`
+- **Build from source** **TODO**
 
 ### Usage
 
-Lint all HTML and handlebars files in `src`.
+Lint all HTML and handlebar files in `src`.
 
 ```bash
-html-lint src/**/*.html src/**/*.html src/**/*.hbs
+html-lint src/**/*.html src/**/*.hbs
 ```
 
 More options with `html-lint --help`.
 
 ## Use in the browser
 
-### Fastest: Use the reverse proxy
+### ⚡Easiest⚡: Use the reverse proxy
 
-Go to [html-lint.notadev.net](html-lint.notadev.net) to lint any website.
+Go to [html-lint.notadev.net](html-lint.notadev.net) to lint any website without installing anything!
 
-### Add `<script>` tag
+### Easy: Add `<script>` tag to your website.
 
-Add `<script src="https://cdnjs.cloudflare.com/TODO"></script>` inside the `<head>` of any page you want linted in the browser. You can conditionally include the script tag in development only. Te above script tag uses `cdnjs.com` to deliver the JS, if you want to host it yourself you can find minified JS bundles in [dist/jsbundles](TODO).
+For modern browsers you can simply add the following somewhere in your HTML
 
-### npm package
-
-If you're working on a frontend with npm you can install the npm package with `npm install --save-dev @emmabastas/html-lint-browser`, you then run it with
-
-```js
-TODO
+```html
+<script type="module">
+  import htmlLint from 'https://cdn.jsdelivr.net/npm/@emmabastas/html-lint@0.1.0-0.1.1/+esm'
+  htmlLint.init()
+</script>
 ```
 
-You only want this to run in development, and so how you do that depends on what bundler you're using.
+(**TODO** Fix script-tag for a "regular" bundle)
 
-### Configuring
+The above script tag uses [jsdelivr](https://www.jsdelivr.com/) to deliver the JS, if you want to host it yourself you can find minified JS bundles in [browser/dist/](https://codeberg.org/emmabastas/html-lint/src/branch/main/browser/dist).
 
-TODO
+### Proper: npm package
+
+Install both the CLI and the in-browser package in your project
+
+```bash
+npm install --save-dev @emmabastas/html-lint
+```
+
+The next step depends on what bundler you are using. The goal is to run html-lint in development builds only. With [parceljs](https://parceljs.org/) I achieve this by putting the following snippet in some `.js` file that is always loaded by my website.
+
+```javascript
+import * as htmlLint from "@emmabastas/html-lint"
+
+if (process.env.NODE_ENV === "development") {
+  htmlLint.init()
+}
+```
 
 ## Contributing
 
