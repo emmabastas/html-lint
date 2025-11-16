@@ -54,7 +54,7 @@ More options with `html-lint --help`.
 
 ### ⚡Easiest⚡: Use the reverse proxy
 
-Go to [html-lint.notadev.net](html-lint.notadev.net) to lint any website without installing anything!
+Go to [html-lint.notadev.net](https://html-lint.notadev.net) to lint any website without installing anything!
 
 ### Easy: Add `<script>` tag to your website.
 
